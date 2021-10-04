@@ -41,7 +41,8 @@ class MainActivity : AppCompatActivity() {
             //launchInsideThread()
             //launchInsideThread2()
             //postDelayed()
-            launchProgressBar()
+            //launchProgressBar()
+            launchProgressBarNum(10)
         }
     }
 
@@ -184,6 +185,25 @@ class MainActivity : AppCompatActivity() {
                 spinner.visibility=View.GONE
                 label.text = ""
             }, 3000)
+        }).start()
+    }
+
+    //enseña num de 1 a 10 mientras aparece el spinner, luego nada, el num puede ser x
+    private fun launchProgressBarNum( num : Int ){
+        Thread(Runnable {
+            runOnUiThread {
+                spinner.visibility=View.VISIBLE
+            }
+            for (i in 1..num) {
+                Thread.sleep(1000)
+                runOnUiThread {
+                    label.text = "Hola!! $i"
+                }
+            }
+            runOnUiThread {
+                spinner.visibility = View.GONE
+                label.text=""
+            }
         }).start()
     }
 }
