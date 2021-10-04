@@ -2,14 +2,21 @@ package com.kagg.psp_playground
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Process
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var label: TextView
     lateinit var button: Button
+    lateinit var spinner: ProgressBar
 
     /** vienen de la vista **/
 
@@ -23,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupView() {
         label = findViewById(R.id.label)
         button = findViewById(R.id.button)
+        spinner =findViewById(R.id.spinner)
         button.setOnClickListener {
             //launchARN()
             // withThread()
@@ -31,7 +39,9 @@ class MainActivity : AppCompatActivity() {
             //threadFromParam()
             //launchMultipleThreads()
             //launchInsideThread()
-            launchInsideThread2()
+            //launchInsideThread2()
+            //postDelayed()
+            launchProgressBar()
         }
     }
 
@@ -145,6 +155,35 @@ class MainActivity : AppCompatActivity() {
                 Log.d("@dev", "thread2")
                 Thread.sleep(2000)
             }
+        }).start()
+    }
+    private fun postDelayed(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            label.text = "Hola!!"
+        }, 3000)
+        Thread(Runnable {
+            Thread.sleep(3000)
+            runOnUiThread {
+                label.text = "Hola!!"
+            }
+        }).start()
+    }
+    //enseña num de 1 a 10, luego un spinner y luego Termina
+    private fun launchProgressBar(){
+        Thread(Runnable {
+            for (i in 1..10) {
+                Thread.sleep(1000)
+                runOnUiThread {
+                    label.text = "Hola!! $i"
+                }
+            }
+            runOnUiThread {
+                spinner.visibility=View.VISIBLE
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                spinner.visibility=View.GONE
+                label.text = ""
+            }, 3000)
         }).start()
     }
 }
