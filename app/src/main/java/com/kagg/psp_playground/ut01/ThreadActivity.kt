@@ -1,18 +1,17 @@
-package com.kagg.psp_playground
+package com.kagg.psp_playground.ut01
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Process
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Spinner
 import android.widget.TextView
+import com.kagg.psp_playground.R
 
-class MainActivity : AppCompatActivity() {
+class ThreadActivity : AppCompatActivity() {
 
     lateinit var label: TextView
     lateinit var button: Button
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             //launchInsideThread2()
             //postDelayed()
             //launchProgressBar()
-            launchProgressBarNum(10)
+            launchProgressBarWhileCount(10)
         }
     }
 
@@ -189,7 +188,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //enseña num de 1 a 10 mientras aparece el spinner, luego nada, el num puede ser x
-    private fun launchProgressBarNum( num : Int ){
+    private fun launchProgressBarWhileCount( num : Int ){
         Thread(Runnable {
             runOnUiThread {
                 spinner.visibility=View.VISIBLE
