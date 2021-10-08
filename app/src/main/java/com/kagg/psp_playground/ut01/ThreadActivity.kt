@@ -1,15 +1,21 @@
-package com.kagg.psp_playground
+package com.kagg.psp_playground.ut01
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
+import com.kagg.psp_playground.R
 
-class MainActivity : AppCompatActivity() {
+class ThreadActivity : AppCompatActivity() {
 
     lateinit var label: TextView
     lateinit var button: Button
+    lateinit var spinner: ProgressBar
 
     /** vienen de la vista **/
 
@@ -23,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupView() {
         label = findViewById(R.id.label)
         button = findViewById(R.id.button)
+        spinner =findViewById(R.id.spinner)
         button.setOnClickListener {
             //launchARN()
             // withThread()
@@ -31,7 +38,10 @@ class MainActivity : AppCompatActivity() {
             //threadFromParam()
             //launchMultipleThreads()
             //launchInsideThread()
-            launchInsideThread2()
+            //launchInsideThread2()
+            //postDelayed()
+            //launchProgressBar()
+            launchProgressBarWhileCount(10)
         }
     }
 
@@ -144,6 +154,54 @@ class MainActivity : AppCompatActivity() {
             for (i in 1..100) {
                 Log.d("@dev", "thread2")
                 Thread.sleep(2000)
+            }
+        }).start()
+    }
+    private fun postDelayed(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            label.text = "Hola!!"
+        }, 3000)
+        Thread(Runnable {
+            Thread.sleep(3000)
+            runOnUiThread {
+                label.text = "Hola!!"
+            }
+        }).start()
+    }
+    //enseña num de 1 a 10, luego un spinner y luego Termina
+    private fun launchProgressBar(){
+        Thread(Runnable {
+            for (i in 1..10) {
+                Thread.sleep(1000)
+                runOnUiThread {
+                    label.text = "Hola!! $i"
+                }
+            }
+            runOnUiThread {
+                spinner.visibility=View.VISIBLE
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                spinner.visibility=View.GONE
+                label.text = ""
+            }, 3000)
+        }).start()
+    }
+
+    //enseña num de 1 a 10 mientras aparece el spinner, luego nada, el num puede ser x
+    private fun launchProgressBarWhileCount( num : Int ){
+        Thread(Runnable {
+            runOnUiThread {
+                spinner.visibility=View.VISIBLE
+            }
+            for (i in 1..num) {
+                Thread.sleep(1000)
+                runOnUiThread {
+                    label.text = "Hola!! $i"
+                }
+            }
+            runOnUiThread {
+                spinner.visibility = View.GONE
+                label.text=""
             }
         }).start()
     }
